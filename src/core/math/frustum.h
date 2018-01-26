@@ -19,6 +19,7 @@ namespace viscom::math {
 
     template<typename real> struct Frustum
     {
+        using v3type = glm::tvec3<real, glm::highp>;
         using v4type = glm::tvec4<real, glm::highp>;
         using mattype = glm::tmat4x4<real, glm::highp>;
 
@@ -89,7 +90,7 @@ namespace viscom::math {
         return p;
     }
 
-    template<typename real> typename Frustum<real>::v3type GetVertexN(const AABB3<real>& aabb, typename Frustum<real>::v3type& normal)
+    template<typename real> typename Frustum<real>::v3type GetVertexN(const AABB3<real>& aabb, const typename Frustum<real>::v3type& normal)
     {
         Frustum<real>::v3type n = aabb.GetMax();
         if (normal.x >= 0) n.x = aabb.GetMin().x;
@@ -103,8 +104,8 @@ namespace viscom::math {
     {
         bool result = true;
         for (int i = 0; i < 6; i++) {
-            if (planes[i].Distance(GetVertexP(aabb, planes[i].GetNormal())) < 0) return false;
-            if (planes[i].Distance(GetVertexN(aabb, planes[i].GetNormal())) < 0) result = true;
+            if (planes_[i].Distance(GetVertexP(aabb, planes_[i].GetNormal())) < 0) return false;
+            if (planes_[i].Distance(GetVertexN(aabb, planes_[i].GetNormal())) < 0) result = true;
         }
 
         return result;
